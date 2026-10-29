@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Mart - Online Bookstore</title>
+    <style>
+        :root {
+            --primary-color: #1b365d;
+            --secondary-color: #f4f6f9;
+            --accent-color: #2e7d32;
+            --text-color: #333333;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-area img {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        .logo-area h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+        .cart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-btn:hover {
+            background-color: #12233f;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(rgba(27, 54, 93, 0.85), rgba(27, 54, 93, 0.85)), url('Logo.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            border-radius: 10px;
+        }
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .section-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-img {
+            height: 320px;
+            width: 100%;
+            object-fit: cover;
+            background-color: #eee;
+        }
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .product-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        .buy-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .buy-btn:hover {
+            background-color: #235e26;
+        }
+        /* Cart Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #777;
+        }
+        .cart-items-list {
+            list-style: none;
+            margin: 20px 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin: 20px 0;
+        }
+        .whatsapp-checkout {
+            display: block;
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .whatsapp-checkout:hover {
+            background-color: #1EBE5D;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <img src="Logo.png" alt="Book Mart Logo">
+            <h1>Book Mart</h1>
+        </div>
+        <button class="cart-btn" onclick="toggleCart()">
+            🛒 Cart (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome to Book Mart</h2>
+            <p>Explore our curated collection of masterclass literature and novels.</p>
+        </div>
+
+        <h3 class="section-title">Featured Books</h3>
+        
+        <div class="products-grid">
+            <!-- Book 1 -->
+            <div class="product-card">
+                <img src="1.png" alt="Masterpieces of the English Short Novel" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Masterpieces of the English Short Novel</h4>
+                    <p class="product-desc">Edited by Kenneth H. Brown. Features nine complete short novels from legendary authors including Samuel Johnson, George Eliot, and Joseph Conrad.</p>
+                    <div class="product-footer">
+                        <span class="product-price">PKR 2,450</span>
+                        <button class="buy-btn" onclick="addToCart('Masterpieces of the English Short Novel', 2450)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book 2 -->
+            <div class="product-card">
+                <img src="2.png" alt="Solar Bones" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Solar Bones</h4>
+                    <p class="product-desc">A novel by Mike McCormack. Winner of the Goldsmiths Prize and BGE Irish Book Awards Novel of the Year. Written with precise and poetic prose.</p>
+                    <div class="product-footer">
+                        <span class="product-price">PKR 1,850</span>
+                        <button class="buy-btn" onclick="addToCart('Solar Bones', 1850)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleCart()">&times;</span>
+            <h3>Your Shopping Cart</h3>
+            <ul class="cart-items-list" id="cartItemsList">
+                <p style="color: #777; text-align: center;">Your cart is empty.</p>
+            </ul>
+            <div class="cart-total">Total: PKR <span id="cartTotalPrice">0</span></div>
+            <a href="#" id="whatsappCheckoutBtn" class="whatsapp-checkout" onclick="checkoutWhatsApp(event)">Order via WhatsApp</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Book Mart. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+
+        function addToCart(title, price) {
+            cart.push({ title, price });
+            updateCartUI();
+            alert(title + " has been added to your cart!");
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            
+            const listEl = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('cartTotalPrice');
+            
+            if (cart.length === 0) {
+                listEl.innerHTML = '<p style="color: #777; text-align: center;">Your cart is empty.</p>';
+                totalEl.innerText = '0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                html += `
+                    <li class="cart-item">
+                        <div>
+                            <strong>${item.title}</strong><br>
+                            <small>PKR ${item.price}</small>
+                        </div>
+                        <button onclick="removeFromCart(${index})" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Remove</button>
+                    </li>
+                `;
+            });
+            listEl.innerHTML = html;
+            totalEl.innerText = total.toLocaleString();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function checkoutWhatsApp(e) {
+            if (cart.length === 0) {
+                e.preventDefault();
+                alert('Your cart is empty!');
+                return;
+            }
+
+            let message = "Hello Book Mart, I want to place an order for the following books:\n\n";
+            let total = 0;
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.title} - PKR ${item.price}\n`;
+                total += item.price;
+            });
+            message += `\nTotal Amount: PKR ${total.toLocaleString()}\n\nPlease confirm my order.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = "923244219842"; // Format without leading zero/plus for URL
+            
+            this.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+        }
+    </script>
+</body>
+</html>
