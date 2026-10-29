@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Mart - Online Bookstore</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="Logo.png">
     <style>
         :root {
             --primary-color: #1b365d;
@@ -113,11 +115,20 @@
         .product-card:hover {
             transform: translateY(-5px);
         }
-        .product-img {
+        .product-img-container {
             height: 320px;
             width: 100%;
-            object-fit: cover;
-            background-color: #eee;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .product-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain; /* Ensures the entire book cover is shown without cropping */
         }
         .product-info {
             padding: 20px;
@@ -257,7 +268,9 @@
         <div class="products-grid">
             <!-- Book 1 -->
             <div class="product-card">
-                <img src="1.png" alt="Masterpieces of the English Short Novel" class="product-img">
+                <div class="product-img-container">
+                    <img src="1.png" alt="Masterpieces of the English Short Novel" class="product-img">
+                </div>
                 <div class="product-info">
                     <h4 class="product-title">Masterpieces of the English Short Novel</h4>
                     <p class="product-desc">Edited by Kenneth H. Brown. Features nine complete short novels from legendary authors including Samuel Johnson, George Eliot, and Joseph Conrad.</p>
@@ -270,7 +283,9 @@
 
             <!-- Book 2 -->
             <div class="product-card">
-                <img src="2.png" alt="Solar Bones" class="product-img">
+                <div class="product-img-container">
+                    <img src="2.png" alt="Solar Bones" class="product-img">
+                </div>
                 <div class="product-info">
                     <h4 class="product-title">Solar Bones</h4>
                     <p class="product-desc">A novel by Mike McCormack. Winner of the Goldsmiths Prize and BGE Irish Book Awards Novel of the Year. Written with precise and poetic prose.</p>
@@ -292,7 +307,7 @@
                 <p style="color: #777; text-align: center;">Your cart is empty.</p>
             </ul>
             <div class="cart-total">Total: PKR <span id="cartTotalPrice">0</span></div>
-            <a href="#" id="whatsappCheckoutBtn" class="whatsapp-checkout" onclick="checkoutWhatsApp(event)">Order via WhatsApp</a>
+            <a href="javascript:void(0);" id="whatsappCheckoutBtn" class="whatsapp-checkout" onclick="checkoutWhatsApp()">Order via WhatsApp</a>
         </div>
     </div>
 
@@ -349,9 +364,8 @@
             updateCartUI();
         }
 
-        function checkoutWhatsApp(e) {
+        function checkoutWhatsApp() {
             if (cart.length === 0) {
-                e.preventDefault();
                 alert('Your cart is empty!');
                 return;
             }
@@ -365,9 +379,10 @@
             message += `\nTotal Amount: PKR ${total.toLocaleString()}\n\nPlease confirm my order.`;
 
             const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = "923244219842"; // Format without leading zero/plus for URL
+            const whatsappNumber = "923244219842"; // Correct format for wa.me link
             
-            this.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            // Open direct WhatsApp chat link
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
         }
     </script>
 </body>
