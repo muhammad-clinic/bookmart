@@ -39,6 +39,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            text-decoration: none;
         }
         .logo-area img {
             height: 50px;
@@ -51,14 +52,28 @@
             color: var(--primary-color);
             letter-spacing: 1px;
         }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
         .cart-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -128,7 +143,7 @@
         .product-img {
             max-height: 100%;
             max-width: 100%;
-            object-fit: contain; /* Ensures the entire book cover is shown without cropping */
+            object-fit: contain;
         }
         .product-info {
             padding: 20px;
@@ -248,13 +263,16 @@
 <body>
 
     <header>
-        <div class="logo-area">
+        <a href="index.html" class="logo-area">
             <img src="Logo.png" alt="Book Mart Logo">
             <h1>Book Mart</h1>
+        </a>
+        <div class="header-right">
+            <a href="privacy.html" class="nav-link">Privacy Policy</a>
+            <button class="cart-btn" onclick="toggleCart()">
+                🛒 Cart (<span id="cart-count">0</span>)
+            </button>
         </div>
-        <button class="cart-btn" onclick="toggleCart()">
-            🛒 Cart (<span id="cart-count">0</span>)
-        </button>
     </header>
 
     <div class="container">
@@ -379,9 +397,8 @@
             message += `\nTotal Amount: PKR ${total.toLocaleString()}\n\nPlease confirm my order.`;
 
             const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = "923244219842"; // Correct format for wa.me link
+            const whatsappNumber = "923244219842";
             
-            // Open direct WhatsApp chat link
             window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
         }
     </script>
